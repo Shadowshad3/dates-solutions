@@ -1,0 +1,12 @@
+{
+  "name": "dates-theme",
+  "private": true,
+  "scripts": {
+    "dev": "npx @tailwindcss/cli -i ./src/css/app.css -o ./dist/css/app.css --watch",
+    "build": "npx @tailwindcss/cli -i ./src/css/app.css -o ./dist/css/app.css --minify"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.1.0",
+    "tailwindcss": "^4.1.0"
+  }
+}

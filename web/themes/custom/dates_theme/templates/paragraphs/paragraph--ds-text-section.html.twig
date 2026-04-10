@@ -1,0 +1,86 @@
+<section{{ attributes.addClass('w-full', 'bg-white') }}>
+  <div class="container-site {{ is_about_page ? 'py-18 lg:py-22' : 'py-16 lg:py-18' }}">
+    {% if is_about_page %}
+      <div class="grid gap-10 border-t border-slate-200 pt-10 lg:grid-cols-[0.88fr_1.12fr] lg:gap-16">
+        <div>
+          {% if paragraph.field_ds_eyebrow.value %}
+            <div class="text-sm font-semibold uppercase tracking-[0.25em] text-blue-700">
+              {{ paragraph.field_ds_eyebrow.value }}
+            </div>
+          {% endif %}
+
+          <h2 class="mt-4 max-w-xl text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">
+            {{ paragraph.field_ds_heading.value }}
+          </h2>
+        </div>
+
+        <div class="about-editorial-copy max-w-3xl text-lg leading-8 text-slate-600">
+          {{ content.field_ds_body }}
+        </div>
+      </div>
+
+    {% elseif is_services_page %}
+      <div class="services-text-shell rounded-[2rem] border border-slate-200 bg-white p-8 shadow-sm sm:p-10">
+        <div class="grid gap-10 lg:gap-12">
+          <div class="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
+            <div>
+              {% if paragraph.field_ds_eyebrow.value %}
+                <div class="text-sm font-semibold uppercase tracking-[0.25em] text-blue-700">
+                  {{ paragraph.field_ds_eyebrow.value }}
+                </div>
+              {% endif %}
+
+              <h2 class="mt-4 max-w-2xl text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">
+                {{ paragraph.field_ds_heading.value }}
+              </h2>
+            </div>
+
+            <div class="max-w-3xl text-lg leading-8 text-slate-600">
+              {{ content.field_ds_body }}
+            </div>
+          </div>
+
+          <div class="services-text-cards grid gap-4 md:grid-cols-3">
+            <div class="services-text-card rounded-[1.35rem] border border-slate-200 bg-slate-50 p-5">
+              <div class="text-xs font-semibold uppercase tracking-[0.2em] text-blue-700">Build</div>
+              <div class="mt-3 text-sm leading-7 text-slate-700">
+                Websites, portals, and platforms built with maintainable structure.
+              </div>
+            </div>
+
+            <div class="services-text-card rounded-[1.35rem] border border-slate-200 bg-slate-50 p-5">
+              <div class="text-xs font-semibold uppercase tracking-[0.2em] text-blue-700">Improve</div>
+              <div class="mt-3 text-sm leading-7 text-slate-700">
+                Optimization, refinement, and practical enhancements after launch.
+              </div>
+            </div>
+
+            <div class="services-text-card rounded-[1.35rem] border border-slate-200 bg-slate-50 p-5">
+              <div class="text-xs font-semibold uppercase tracking-[0.2em] text-blue-700">Support</div>
+              <div class="mt-3 text-sm leading-7 text-slate-700">
+                Long-term technical continuity through support and maintenance.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    {% else %}
+      <div class="max-w-4xl">
+        {% if paragraph.field_ds_eyebrow.value %}
+          <div class="text-sm font-semibold uppercase tracking-[0.25em] text-blue-700">
+            {{ paragraph.field_ds_eyebrow.value }}
+          </div>
+        {% endif %}
+
+        <h2 class="mt-4 text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">
+          {{ paragraph.field_ds_heading.value }}
+        </h2>
+
+        <div class="mt-6 max-w-3xl text-lg leading-8 text-slate-600">
+          {{ content.field_ds_body }}
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</section>

@@ -1,0 +1,249 @@
+<section{{ attributes.addClass('relative', 'overflow-hidden', is_about_page ? 'bg-white' : (is_services_page ? 'bg-slate-950' : 'bg-slate-950')) }}>
+  {% if is_about_page %}
+    <div class="about-hero-tech absolute inset-0"></div>
+    <div class="about-hero-grid absolute inset-0"></div>
+
+    <div class="container-site relative z-10 py-20 lg:py-24">
+      <div class="max-w-6xl">
+        {% if paragraph.field_ds_eyebrow.value %}
+          <div class="mb-6 inline-flex rounded-full border border-white/15 bg-white/8 px-5 py-2 text-sm font-medium text-blue-100 shadow-sm backdrop-blur-sm">
+            {{ paragraph.field_ds_eyebrow.value }}
+          </div>
+        {% endif %}
+
+        <div class="grid gap-12 lg:grid-cols-[1.08fr_.92fr] lg:items-start">
+          <div>
+            <h1 class="max-w-3xl text-5xl font-semibold tracking-tight text-white sm:text-6xl">
+              {{ paragraph.field_ds_heading.value }}
+            </h1>
+          </div>
+
+          <div class="lg:pt-3">
+            <div class="about-hero-copy max-w-2xl text-lg leading-8 text-slate-300">
+              {{ content.field_ds_body }}
+            </div>
+
+            <div class="mt-8 flex flex-wrap gap-3">
+              {% if primary_cta %}
+                <a href="{{ primary_cta.url }}" class="button-primary">{{ primary_cta.title }}</a>
+              {% endif %}
+              {% if secondary_cta %}
+                <a href="{{ secondary_cta.url }}" class="inline-flex items-center justify-center rounded-full border border-white/18 bg-white/8 px-6 py-3 text-sm font-semibold text-white shadow-sm backdrop-blur-sm transition hover:bg-white/12">
+                  {{ secondary_cta.title }}
+                </a>
+              {% endif %}
+            </div>
+
+            {% if markets %}
+              <div class="mt-10 flex flex-wrap gap-3">
+                {% for item in markets %}
+                  <span class="rounded-full border border-white/12 bg-white/6 px-4 py-2 text-sm text-slate-200 shadow-sm backdrop-blur-sm">
+                    {{ item }}
+                  </span>
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+  {% elseif is_services_page %}
+    <div class="services-hero-tech absolute inset-0"></div>
+    <div class="services-hero-grid absolute inset-0"></div>
+
+    <div class="container-site relative z-10 py-18 lg:py-22">
+      <div class="grid gap-14 lg:grid-cols-[1.05fr_.95fr] lg:items-end">
+        <div class="max-w-3xl">
+          {% if paragraph.field_ds_eyebrow.value %}
+            <div class="mb-6 inline-flex rounded-full border border-cyan-400/20 bg-white/[0.05] px-5 py-2 text-sm font-medium text-cyan-200 shadow-sm backdrop-blur-sm">
+              {{ paragraph.field_ds_eyebrow.value }}
+            </div>
+          {% endif %}
+
+          <h1 class="max-w-3xl text-5xl font-semibold tracking-tight text-white sm:text-6xl">
+            {{ paragraph.field_ds_heading.value }}
+          </h1>
+
+          <div class="mt-6 max-w-2xl text-lg leading-8 text-slate-300">
+            {{ content.field_ds_body }}
+          </div>
+
+          <div class="mt-8 flex flex-wrap gap-3">
+            {% if primary_cta %}
+              <a href="{{ primary_cta.url }}" class="button-primary">{{ primary_cta.title }}</a>
+            {% endif %}
+            {% if secondary_cta %}
+              <a href="{{ secondary_cta.url }}" class="inline-flex items-center justify-center rounded-full border border-white/16 bg-white/[0.04] px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/[0.08]">
+                {{ secondary_cta.title }}
+              </a>
+            {% endif %}
+          </div>
+
+          {% if markets %}
+            <div class="mt-10 flex flex-wrap gap-3">
+              {% for item in markets %}
+                <span class="rounded-full border border-white/12 bg-white/[0.04] px-4 py-2 text-sm text-slate-200 shadow-sm backdrop-blur-sm">
+                  {{ item }}
+                </span>
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+
+        <div class="services-hero-panel rounded-[2rem] border border-white/10 bg-white/[0.04] p-6 shadow-2xl shadow-slate-950/25 backdrop-blur-md">
+          <div class="grid gap-4 sm:grid-cols-2">
+            <div class="rounded-[1.35rem] border border-white/10 bg-white/[0.04] p-5">
+              <div class="text-sm uppercase tracking-[0.2em] text-cyan-300">Build</div>
+              <div class="mt-3 text-xl font-semibold text-white">Drupal and SaaS delivery</div>
+              <div class="mt-2 text-sm leading-7 text-slate-300">Websites, portals, custom platforms, and structured digital builds.</div>
+            </div>
+
+            <div class="rounded-[1.35rem] border border-white/10 bg-white/[0.04] p-5">
+              <div class="text-sm uppercase tracking-[0.2em] text-cyan-300">Improve</div>
+              <div class="mt-3 text-xl font-semibold text-white">Optimization and growth</div>
+              <div class="mt-2 text-sm leading-7 text-slate-300">Performance, UX improvements, technical refinement, and post-launch evolution.</div>
+            </div>
+
+            <div class="rounded-[1.35rem] border border-white/10 bg-white/[0.04] p-5">
+              <div class="text-sm uppercase tracking-[0.2em] text-cyan-300">Connect</div>
+              <div class="mt-3 text-xl font-semibold text-white">Systems integration</div>
+              <div class="mt-2 text-sm leading-7 text-slate-300">APIs, CRMs, forms, gateways, analytics, and workflow connections.</div>
+            </div>
+
+            <div class="rounded-[1.35rem] border border-white/10 bg-white/[0.04] p-5">
+              <div class="text-sm uppercase tracking-[0.2em] text-cyan-300">Support</div>
+              <div class="mt-3 text-xl font-semibold text-white">Long-term ownership</div>
+              <div class="mt-2 text-sm leading-7 text-slate-300">Maintenance, updates, support, monitoring, and technical continuity.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  {% else %}
+    {% if hero_media_type == 'video' and hero_media_url %}
+      <video
+        class="absolute inset-0 h-full w-full object-cover"
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="metadata"
+        aria-hidden="true"
+      >
+        <source src="{{ hero_media_url }}" type="video/mp4">
+      </video>
+
+      <div class="absolute inset-0 bg-slate-950/58"></div>
+      <div class="absolute inset-0 bg-gradient-to-r from-slate-950/86 via-slate-950/54 to-slate-950/18"></div>
+      <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(37,99,235,0.18),transparent_26%),radial-gradient(circle_at_right,rgba(34,211,238,0.10),transparent_24%)]"></div>
+
+    {% elseif hero_media_type == 'image' and hero_media_url %}
+      <div class="absolute inset-0" aria-hidden="true">
+        <img
+          src="{{ hero_media_url }}"
+          alt=""
+          class="h-full w-full object-cover"
+        >
+      </div>
+
+      <div class="absolute inset-0 bg-slate-950/62"></div>
+      <div class="absolute inset-0 bg-gradient-to-r from-slate-950/88 via-slate-950/58 to-slate-950/22"></div>
+      <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(37,99,235,0.18),transparent_26%),radial-gradient(circle_at_right,rgba(34,211,238,0.10),transparent_24%)]"></div>
+
+    {% elseif hero_video_url %}
+      <video
+        class="absolute inset-0 h-full w-full object-cover"
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="metadata"
+        aria-hidden="true"
+      >
+        <source src="{{ hero_video_url }}" type="video/mp4">
+      </video>
+
+      <div class="absolute inset-0 bg-slate-950/58"></div>
+      <div class="absolute inset-0 bg-gradient-to-r from-slate-950/86 via-slate-950/54 to-slate-950/18"></div>
+      <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(37,99,235,0.18),transparent_26%),radial-gradient(circle_at_right,rgba(34,211,238,0.10),transparent_24%)]"></div>
+
+    {% else %}
+      <div class="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-blue-950"></div>
+      <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(37,99,235,0.18),transparent_26%),radial-gradient(circle_at_right,rgba(34,211,238,0.10),transparent_24%)]"></div>
+    {% endif %}
+
+    <div class="container-site relative z-10 grid gap-14 py-16 lg:grid-cols-[1.08fr_.92fr] lg:py-18">
+      <div class="max-w-3xl">
+        {% if paragraph.field_ds_eyebrow.value %}
+          <div class="mb-5 inline-flex rounded-full border border-white/30 bg-white/12 px-5 py-2 text-sm font-medium text-white shadow-sm backdrop-blur-md">
+            {{ paragraph.field_ds_eyebrow.value }}
+          </div>
+        {% endif %}
+
+        <h1 class="max-w-2xl text-5xl font-semibold tracking-tight text-white sm:text-6xl">
+          {{ paragraph.field_ds_heading.value }}
+        </h1>
+
+        <div class="mt-6 max-w-2xl text-lg leading-8 text-slate-200">
+          {{ content.field_ds_body }}
+        </div>
+
+        <div class="mt-8 flex flex-wrap gap-3">
+          {% if primary_cta %}
+            <a href="{{ primary_cta.url }}" class="button-primary">{{ primary_cta.title }}</a>
+          {% endif %}
+
+          {% if secondary_cta %}
+            <a href="{{ secondary_cta.url }}" class="inline-flex items-center justify-center rounded-full border border-white/70 bg-white px-6 py-3 text-sm font-semibold text-slate-950 shadow-sm transition hover:bg-slate-100">
+              {{ secondary_cta.title }}
+            </a>
+          {% endif %}
+        </div>
+
+        {% if markets %}
+          <div class="mt-10 flex flex-wrap gap-3">
+            {% for item in markets %}
+              <span class="rounded-full border border-white/35 bg-white/10 px-4 py-2 text-sm text-white shadow-sm backdrop-blur-md">
+                {{ item }}
+              </span>
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+
+      <div class="rounded-[1.6rem] border border-white/70 bg-white p-6 text-slate-900 shadow-2xl">
+        <div class="text-sm uppercase tracking-[0.2em] text-slate-600">
+          Built for long-term digital growth
+        </div>
+
+        <div class="mt-4 text-2xl font-semibold leading-snug text-slate-950">
+          Launch is only the beginning. The real value comes from what happens after.
+        </div>
+
+        <div class="mt-6 grid gap-4 sm:grid-cols-2">
+          <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+            <div class="text-3xl font-semibold text-slate-950">Strategy</div>
+            <div class="mt-1 text-sm text-slate-700">Planned around your business goals</div>
+          </div>
+
+          <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+            <div class="text-3xl font-semibold text-slate-950">Drupal 11</div>
+            <div class="mt-1 text-sm text-slate-700">Structured and scalable websites</div>
+          </div>
+
+          <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+            <div class="text-3xl font-semibold text-slate-950">SaaS</div>
+            <div class="mt-1 text-sm text-slate-700">Custom platforms for real workflows</div>
+          </div>
+
+          <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+            <div class="text-3xl font-semibold text-slate-950">Ownership</div>
+            <div class="mt-1 text-sm text-slate-700">Support, maintenance, and improvement</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+</section>

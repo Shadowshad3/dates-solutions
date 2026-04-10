@@ -1,0 +1,26 @@
+{#
+/**
+ * @file
+ * Theme override for a single DS Contact Item paragraph.
+ */
+#}
+
+{% set title = content.field_ds_title %}
+{% set body = content.field_ds_body %}
+{% set link = content.field_ds_link %}
+
+<article class="contact-card">
+  {% if title %}
+    <h3 class="contact-card__title">{{ title }}</h3>
+  {% endif %}
+
+  {% if body %}
+    <div class="contact-card__body">{{ body }}</div>
+  {% endif %}
+
+  {% if link %}
+    <div class="contact-card__link">
+      {{ link }}
+    </div>
+  {% endif %}
+</article>

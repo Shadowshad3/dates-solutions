@@ -1,0 +1,15 @@
+<article{{ attributes.addClass(
+  'node--type-landing-page',
+  'landing-page',
+  'landing-page--' ~ landing_page_variant,
+  is_home_page ? 'landing-page--home',
+  is_about_page ? 'landing-page--about',
+  is_services_page ? 'landing-page--services'
+) }}>
+  {{ title_prefix }}
+  {{ title_suffix }}
+
+  <div class="landing-page__sections">
+    {{ content.field_ds_page_sections }}
+  </div>
+</article>

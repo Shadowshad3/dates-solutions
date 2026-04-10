@@ -1,0 +1,9 @@
+{% if rows %}
+  <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+    {% for row in rows %}
+      <div>
+        {{ row.content }}
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}

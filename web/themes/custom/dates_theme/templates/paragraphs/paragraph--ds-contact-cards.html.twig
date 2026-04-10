@@ -1,0 +1,40 @@
+{#
+/**
+ * @file
+ * Theme override for the DS Contact Cards paragraph.
+ */
+#}
+
+{% set eyebrow = content.field_ds_eyebrow %}
+{% set heading = content.field_ds_heading %}
+{% set body = content.field_ds_body %}
+
+<section class="section-contact-cards">
+  <div class="container-site">
+    <div class="contact-cards__shell">
+      <div class="contact-cards__intro">
+        {% if eyebrow %}
+          <div class="section-eyebrow">{{ eyebrow }}</div>
+        {% endif %}
+
+        {% if heading %}
+          <h2 class="section-title">{{ heading }}</h2>
+        {% endif %}
+
+        {% if body %}
+          <div class="section-copy">
+            {{ body }}
+          </div>
+        {% endif %}
+      </div>
+
+      <div class="contact-cards__grid">
+        {% for key, item in content.field_ds_contact_items %}
+          {% if key|first != '#' %}
+            {{ item }}
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>

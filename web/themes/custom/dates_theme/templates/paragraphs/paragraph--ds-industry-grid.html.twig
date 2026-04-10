@@ -1,0 +1,61 @@
+<section{{ attributes.addClass('w-full', is_about_page ? 'bg-white' : 'bg-slate-50') }}>
+  {% if is_about_page %}
+    <div class="container-site py-16 lg:py-18">
+      <div class="grid gap-10 border-t border-slate-200 pt-10 lg:grid-cols-[0.82fr_1.18fr] lg:gap-16">
+        <div>
+          {% if paragraph.field_ds_eyebrow.value %}
+            <div class="text-sm font-semibold uppercase tracking-[0.25em] text-blue-700">
+              {{ paragraph.field_ds_eyebrow.value }}
+            </div>
+          {% endif %}
+
+          <h2 class="mt-4 max-w-xl text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">
+            {{ paragraph.field_ds_heading.value }}
+          </h2>
+
+          <div class="mt-5 max-w-2xl text-lg leading-8 text-slate-600">
+            {{ content.field_ds_body }}
+          </div>
+        </div>
+
+        {% if industry_items %}
+          <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+            {% for item in industry_items %}
+              <div class="about-pill-card flex min-h-[92px] items-center rounded-[1.35rem] border border-slate-200 bg-white px-5 py-5 text-sm font-semibold leading-6 text-slate-700 shadow-sm">
+                {{ item }}
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  {% else %}
+    <div class="container-site grid gap-10 py-16 lg:grid-cols-[0.9fr_1.1fr]">
+      <div>
+        {% if paragraph.field_ds_eyebrow.value %}
+          <div class="text-sm font-semibold uppercase tracking-[0.25em] text-blue-700">
+            {{ paragraph.field_ds_eyebrow.value }}
+          </div>
+        {% endif %}
+
+        <h2 class="mt-4 text-3xl font-semibold tracking-tight sm:text-4xl">
+          {{ paragraph.field_ds_heading.value }}
+        </h2>
+
+        <div class="mt-4 text-lg leading-8 text-slate-600">
+          {{ content.field_ds_body }}
+        </div>
+      </div>
+
+      {% if industry_items %}
+        <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          {% for item in industry_items %}
+            <div class="soft-card p-6 text-sm font-medium text-slate-700">
+              {{ item }}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+  {% endif %}
+</section>

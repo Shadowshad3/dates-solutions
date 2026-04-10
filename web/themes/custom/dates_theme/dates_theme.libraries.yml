@@ -1,0 +1,11 @@
+global:
+  css:
+    theme:
+      dist/css/app.css: {}
+
+
+service_intro_selector:
+  js:
+    js/service-intro-selector.js: {}
+  dependencies:
+    - core/drupal

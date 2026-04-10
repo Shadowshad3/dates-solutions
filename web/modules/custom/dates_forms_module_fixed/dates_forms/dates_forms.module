@@ -1,0 +1,20 @@
+<?php
+
+declare(strict_types=1);
+
+/**
+ * @file
+ * Hooks and bootstrap for the Date Solutions Forms module.
+ */
+
+/**
+ * Implements hook_mail().
+ */
+function dates_forms_mail(string $key, array &$message, array $params): void {
+  if ($key !== 'lead_notification') {
+    return;
+  }
+
+  $message['subject'] = $params['subject'] ?? 'Date Solutions inquiry';
+  $message['body'][] = implode(PHP_EOL, $params['lines'] ?? []);
+}

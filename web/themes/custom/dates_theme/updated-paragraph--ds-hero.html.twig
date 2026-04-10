@@ -1,0 +1,85 @@
+<section{{ attributes.addClass('relative', 'overflow-hidden', 'bg-white') }}>
+  {% if hero_video_url %}
+    <video
+      class="absolute inset-0 h-full w-full object-cover"
+      autoplay
+      muted
+      loop
+      playsinline
+      preload="metadata"
+      aria-hidden="true"
+    >
+      <source src="{{ hero_video_url }}" type="video/mp4">
+    </video>
+
+    <div class="absolute inset-0 bg-white/70"></div>
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(37,99,235,0.18),transparent_28%),radial-gradient(circle_at_left,rgba(96,165,250,0.12),transparent_25%)]"></div>
+  {% else %}
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(37,99,235,0.12),transparent_28%),radial-gradient(circle_at_left,rgba(96,165,250,0.08),transparent_25%)]"></div>
+  {% endif %}
+
+  <div class="container-site relative z-10 grid gap-14 py-16 lg:grid-cols-[1.08fr_.92fr] lg:py-14">
+    <div class="max-w-3xl">
+      {% if paragraph.field_ds_eyebrow.value %}
+        <div class="mb-5 inline-flex rounded-full border border-blue-200 bg-white px-5 py-2 text-sm font-medium text-blue-700 shadow-sm">
+          {{ paragraph.field_ds_eyebrow.value }}
+        </div>
+      {% endif %}
+
+      <h1 class="max-w-2xl text-5xl font-semibold tracking-tight text-slate-950 sm:text-6xl">
+        {{ paragraph.field_ds_heading.value }}
+      </h1>
+
+      <div class="mt-6 max-w-2xl text-lg leading-8 text-slate-600">
+        {{ content.field_ds_body }}
+      </div>
+
+      <div class="mt-8 flex flex-wrap gap-3">
+        {% if primary_cta %}
+          <a href="{{ primary_cta.url }}" class="button-primary">{{ primary_cta.title }}</a>
+        {% endif %}
+        {% if secondary_cta %}
+          <a href="{{ secondary_cta.url }}" class="button-secondary">{{ secondary_cta.title }}</a>
+        {% endif %}
+      </div>
+
+      {% if markets %}
+        <div class="mt-10 flex flex-wrap gap-3">
+          {% for item in markets %}
+            <span class="rounded-full border border-slate-300 bg-white px-4 py-2 text-sm text-slate-600 shadow-sm">
+              {{ item }}
+            </span>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="rounded-[2rem] border border-slate-200 bg-white/90 p-6 shadow-xl shadow-slate-300/40 backdrop-blur-sm">
+      <div class="rounded-[1.6rem] bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 p-6 text-white">
+        <div class="text-sm uppercase tracking-[0.2em] text-slate-300">Built for long-term digital growth</div>
+        <div class="mt-4 text-2xl font-semibold leading-snug">
+          Launch is only the beginning. The real value comes from what happens after.
+        </div>
+
+        <div class="mt-6 grid gap-4 sm:grid-cols-2">
+          <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+            <div class="text-3xl font-semibold">Strategy</div>
+            <div class="mt-1 text-sm text-slate-300">Planned around your business goals</div>
+          </div>
+          <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+            <div class="text-3xl font-semibold">Drupal 11</div>
+            <div class="mt-1 text-sm text-slate-300">Structured and scalable websites</div>
+          </div>
+          <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+            <div class="text-3xl font-semibold">SaaS</div>
+            <div class="mt-1 text-sm text-slate-300">Custom platforms for real workflows</div>
+          </div>
+          <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+            <div class="text-3xl font-semibold">Ownership</div>
+            <div class="mt-1 text-sm text-slate-300">Support, maintenance, and improvement</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

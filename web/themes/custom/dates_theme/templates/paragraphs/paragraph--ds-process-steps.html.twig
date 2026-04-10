@@ -1,0 +1,60 @@
+<section{{ attributes.addClass('w-full', is_services_page ? 'bg-white' : 'bg-slate-100') }}>
+  {% if is_services_page %}
+    <div class="container-site py-16 lg:py-20">
+      <div class="services-process-shell rounded-[2rem] border border-slate-200 bg-white p-8 shadow-sm sm:p-10">
+        <div class="max-w-3xl">
+          {% if paragraph.field_ds_eyebrow.value %}
+            <div class="text-sm font-semibold uppercase tracking-[0.25em] text-blue-700">
+              {{ paragraph.field_ds_eyebrow.value }}
+            </div>
+          {% endif %}
+
+          <h2 class="mt-4 text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">
+            {{ paragraph.field_ds_heading.value }}
+          </h2>
+        </div>
+
+        {% if process_steps %}
+          <div class="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+            {% for item in process_steps %}
+              <div class="services-process-card rounded-[1.5rem] border border-slate-200 bg-slate-50 p-6">
+                <div class="inline-flex rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-blue-700">
+                  Step {{ loop.index }}
+                </div>
+                <h3 class="mt-4 text-lg font-semibold leading-7 text-slate-950">
+                  {{ item }}
+                </h3>
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+
+  {% else %}
+    <div class="container-site py-16">
+      <div class="max-w-3xl">
+        {% if paragraph.field_ds_eyebrow.value %}
+          <div class="text-sm font-semibold uppercase tracking-[0.25em] text-blue-700">
+            {{ paragraph.field_ds_eyebrow.value }}
+          </div>
+        {% endif %}
+
+        <h2 class="mt-4 text-3xl font-semibold tracking-tight sm:text-4xl">
+          {{ paragraph.field_ds_heading.value }}
+        </h2>
+      </div>
+
+      {% if process_steps %}
+        <div class="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+          {% for item in process_steps %}
+            <div class="soft-card p-6">
+              <div class="text-sm font-semibold text-blue-700">Step {{ loop.index }}</div>
+              <h3 class="mt-3 text-lg font-semibold text-slate-900">{{ item }}</h3>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+  {% endif %}
+</section>

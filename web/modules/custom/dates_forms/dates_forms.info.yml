@@ -1,0 +1,5 @@
+name: 'Date Solutions Forms'
+type: module
+description: 'Custom inquiry and consultation forms for the Date Solutions website.'
+package: Custom
+core_version_requirement: ^11

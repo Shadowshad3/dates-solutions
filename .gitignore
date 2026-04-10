@@ -1,0 +1,7 @@
+/vendor/
+/web/sites/default/files/
+/web/sites/default/settings.php
+/web/sites/default/settings.local.php
+/.ddev/.import-db/
+/node_modules/
+/.env

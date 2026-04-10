@@ -1,0 +1,294 @@
+<?php
+
+/**
+ * @file
+ * Theme helpers for Date Solutions.
+ */
+
+/**
+ * Get landing page variant flags based on current route alias.
+ */
+function _dates_theme_get_landing_page_context(): array {
+  $is_home_page = FALSE;
+  $is_about_page = FALSE;
+  $is_services_page = FALSE;
+  $landing_page_variant = 'default';
+
+  $path_matcher = \Drupal::service('path.matcher');
+  $current_path = \Drupal::service('path.current')->getPath();
+  $current_alias = \Drupal::service('path_alias.manager')->getAliasByPath($current_path);
+
+  if ($path_matcher->isFrontPage()) {
+    $is_home_page = TRUE;
+    $landing_page_variant = 'home';
+  }
+  elseif ($current_alias === '/about') {
+    $is_about_page = TRUE;
+    $landing_page_variant = 'about';
+  }
+  elseif ($current_alias === '/services') {
+    $is_services_page = TRUE;
+    $landing_page_variant = 'services';
+  }
+
+  return [
+    'is_home_page' => $is_home_page,
+    'is_about_page' => $is_about_page,
+    'is_services_page' => $is_services_page,
+    'landing_page_variant' => $landing_page_variant,
+  ];
+}
+
+/**
+ * Build structured service items for the Services selector.
+ */
+function _dates_theme_get_service_items(): array {
+  $storage = \Drupal::entityTypeManager()->getStorage('node');
+
+  $query = $storage->getQuery()
+    ->accessCheck(TRUE)
+    ->condition('type', 'service')
+    ->condition('status', 1)
+    ->sort('field_ds_weight.value', 'ASC')
+    ->sort('title', 'ASC');
+
+  $nids = $query->execute();
+  if (empty($nids)) {
+    return [];
+  }
+
+  $nodes = $storage->loadMultiple($nids);
+  $items = [];
+
+  foreach ($nodes as $node) {
+    if (!$node instanceof \Drupal\node\NodeInterface) {
+      continue;
+    }
+
+    $summary = '';
+    if ($node->hasField('field_ds_summary') && !$node->get('field_ds_summary')->isEmpty()) {
+      $summary_item = $node->get('field_ds_summary')->first();
+      $summary = $summary_item->processed ?? $summary_item->value ?? '';
+    }
+
+    $image_data = _dates_theme_media_image_data($node, 'field_ds_card_image');
+    $image_url = $image_data['url'];
+    $image_alt = $image_data['alt'] ?: $node->label();
+
+    $items[] = [
+      'title' => $node->label(),
+      'summary' => $summary,
+      'url' => $node->toUrl()->toString(),
+      'image_url' => $image_url,
+      'image_alt' => $image_alt,
+    ];
+  }
+
+  return $items;
+}
+
+/**
+ * Preprocess node templates.
+ */
+function dates_theme_preprocess_node(array &$variables): void {
+  if (empty($variables['node'])) {
+    return;
+  }
+
+  $node = $variables['node'];
+  $context = _dates_theme_get_landing_page_context();
+
+  $variables['is_home_page'] = $context['is_home_page'];
+  $variables['is_about_page'] = $context['is_about_page'];
+  $variables['is_services_page'] = $context['is_services_page'];
+  $variables['landing_page_variant'] = $context['landing_page_variant'];
+
+  if ($node->bundle() === 'service' && ($variables['view_mode'] ?? '') === 'teaser') {
+    $summary_item = $node->get('field_ds_summary');
+    $variables['service_summary'] = '';
+
+    if (!$summary_item->isEmpty()) {
+      $variables['service_summary'] = $summary_item->processed ?? $summary_item->value ?? '';
+    }
+
+    $variables['service_link'] = $node->toUrl()->toString();
+  }
+}
+
+/**
+ * Preprocess paragraph templates.
+ */
+function dates_theme_preprocess_paragraph(array &$variables): void {
+  if (empty($variables['paragraph'])) {
+    return;
+  }
+
+  $paragraph = $variables['paragraph'];
+  $bundle = $paragraph->bundle();
+  $context = _dates_theme_get_landing_page_context();
+
+  $variables['is_home_page'] = $context['is_home_page'];
+  $variables['is_about_page'] = $context['is_about_page'];
+  $variables['is_services_page'] = $context['is_services_page'];
+  $variables['landing_page_variant'] = $context['landing_page_variant'];
+
+  switch ($bundle) {
+    case 'ds_hero':
+      $variables['markets'] = _dates_theme_text_values($paragraph, 'field_ds_markets');
+      $variables['primary_cta'] = _dates_theme_link_data($paragraph, 'field_ds_primary_cta');
+      $variables['secondary_cta'] = _dates_theme_link_data($paragraph, 'field_ds_secondary_cta');
+      $variables['hero_video_url'] = _dates_theme_file_url($paragraph, 'field_hero_background_video');
+      break;
+
+    case 'ds_trust_strip':
+      $variables['trust_items'] = _dates_theme_text_values($paragraph, 'field_ds_trust_items');
+      break;
+
+    case 'ds_service_intro':
+      if ($variables['is_services_page']) {
+        $variables['services_items'] = _dates_theme_get_service_items();
+      }
+      else {
+        $variables['services_view'] = function_exists('views_embed_view')
+          ? views_embed_view('services', 'block_1')
+          : NULL;
+      }
+      break;
+
+    case 'ds_proof_band':
+      $variables['proof_items'] = _dates_theme_text_values($paragraph, 'field_ds_proof_items');
+      break;
+
+    case 'ds_industry_grid':
+      $variables['industry_items'] = _dates_theme_text_values($paragraph, 'field_ds_industry_items');
+      break;
+
+    case 'ds_process_steps':
+      $variables['process_steps'] = _dates_theme_text_values($paragraph, 'field_ds_process_steps');
+      break;
+
+    case 'ds_cta_banner':
+      $variables['primary_cta'] = _dates_theme_link_data($paragraph, 'field_ds_primary_cta');
+      $variables['secondary_cta'] = _dates_theme_link_data($paragraph, 'field_ds_secondary_cta');
+      break;
+
+    case 'ds_editorial_image_section':
+      $variables['editorial_layout'] = 'image_left';
+
+      if ($paragraph->hasField('field_ds_layout') && !$paragraph->get('field_ds_layout')->isEmpty()) {
+        $variables['editorial_layout'] = $paragraph->get('field_ds_layout')->value;
+      }
+      break;
+
+    case 'ds_service_feature_section':
+      $variables['service_feature_layout'] = 'image_left';
+
+      if ($paragraph->hasField('field_ds_layout') && !$paragraph->get('field_ds_layout')->isEmpty()) {
+        $variables['service_feature_layout'] = $paragraph->get('field_ds_layout')->value;
+      }
+      break;
+  }
+}
+
+/**
+ * Extract plain text field values from multi-value fields.
+ */
+function _dates_theme_text_values($entity, string $field_name): array {
+  if (!$entity->hasField($field_name) || $entity->get($field_name)->isEmpty()) {
+    return [];
+  }
+
+  $values = [];
+  foreach ($entity->get($field_name)->getValue() as $item) {
+    if (!empty($item['value'])) {
+      $values[] = $item['value'];
+    }
+  }
+
+  return $values;
+}
+
+/**
+ * Extract link field data.
+ */
+function _dates_theme_link_data($entity, string $field_name): ?array {
+  if (!$entity->hasField($field_name) || $entity->get($field_name)->isEmpty()) {
+    return NULL;
+  }
+
+  $item = $entity->get($field_name)->first();
+
+  return [
+    'url' => $item->getUrl()->toString(),
+    'title' => $item->title ?: 'Learn more',
+  ];
+}
+
+/**
+ * Resolve a public file URL from a direct File field.
+ */
+function _dates_theme_file_url($entity, string $field_name): ?string {
+  if (!$entity->hasField($field_name) || $entity->get($field_name)->isEmpty()) {
+    return NULL;
+  }
+
+  $file = $entity->get($field_name)->entity;
+  if (!$file instanceof \Drupal\file\FileInterface) {
+    return NULL;
+  }
+
+  return \Drupal::service('file_url_generator')->generateString($file->getFileUri());
+}
+
+/**
+ * Resolve image URL and alt text from either a direct image/file field
+ * or a media reference field.
+ */
+function _dates_theme_media_image_data($entity, string $field_name): array {
+  $data = [
+    'url' => NULL,
+    'alt' => '',
+  ];
+
+  if (!$entity->hasField($field_name) || $entity->get($field_name)->isEmpty()) {
+    return $data;
+  }
+
+  $item = $entity->get($field_name)->first();
+  $target = $item->entity ?? NULL;
+
+  if (!$target) {
+    return $data;
+  }
+
+  $file_url_generator = \Drupal::service('file_url_generator');
+
+  // Direct image/file field.
+  if ($target instanceof \Drupal\file\FileInterface) {
+    $data['url'] = $file_url_generator->generateString($target->getFileUri());
+    $data['alt'] = $item->alt ?? '';
+    return $data;
+  }
+
+  // Media reference field.
+  if ($target instanceof \Drupal\media\MediaInterface) {
+    $source_field_definition = $target->getSource()->getSourceFieldDefinition($target);
+
+    if ($source_field_definition) {
+      $source_field_name = $source_field_definition->getName();
+
+      if ($target->hasField($source_field_name) && !$target->get($source_field_name)->isEmpty()) {
+        $source_item = $target->get($source_field_name)->first();
+        $source_file = $source_item->entity ?? NULL;
+
+        if ($source_file instanceof \Drupal\file\FileInterface) {
+          $data['url'] = $file_url_generator->generateString($source_file->getFileUri());
+          $data['alt'] = $source_item->alt ?? '';
+          return $data;
+        }
+      }
+    }
+  }
+
+  return $data;
+}

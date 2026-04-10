@@ -1,0 +1,40 @@
+<div class="min-h-screen bg-slate-50 text-slate-900">
+  <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-slate-900">
+    Skip to main content
+  </a>
+
+  {% if page.header %}
+    <header class="sticky top-0 z-50 bg-slate-950 text-white shadow-md">
+      <div class="container-site">
+        <div class="flex min-h-[64px] items-center lg:min-h-[84px]">
+          {{ page.header }}
+        </div>
+      </div>
+    </header>
+  {% endif %}
+
+  {% if messages %}
+    <div class="container-site py-4">
+      {{ messages }}
+    </div>
+  {% endif %}
+
+  <main id="main-content" class="bg-slate-50">
+    {{ page.content }}
+  </main>
+
+  <footer class="border-t border-slate-200 bg-white">
+    <div class="container-site flex flex-col gap-4 py-8 text-sm text-slate-500 md:flex-row md:items-center md:justify-between">
+      <div>
+        <div class="font-semibold text-slate-900">Date Solutions</div>
+        <div class="mt-1">Drupal, SaaS, and long-term web support.</div>
+      </div>
+
+      <div class="flex gap-6">
+        <a href="/" class="hover:text-slate-900">Home</a>
+        <a href="/about" class="hover:text-slate-900">About</a>
+        <a href="/services" class="hover:text-slate-900">Services</a>
+      </div>
+    </div>
+  </footer>
+</div>

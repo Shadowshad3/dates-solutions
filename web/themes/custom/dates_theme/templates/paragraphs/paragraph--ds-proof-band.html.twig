@@ -1,0 +1,108 @@
+<section{{ attributes.addClass(
+  'w-full',
+  is_about_page ? 'bg-white' : (is_services_page ? 'bg-slate-50' : 'bg-slate-950'),
+  is_about_page ? 'text-slate-900' : (is_services_page ? 'text-slate-900' : 'text-white')
+) }}>
+  {% if is_about_page %}
+    <div class="container-site py-16 lg:py-20">
+      <div class="about-proof-shell rounded-[2rem] border border-white/8 bg-gradient-to-br from-slate-950 via-slate-900 to-[#0b1730] p-8 text-white shadow-2xl shadow-slate-950/25 sm:p-10">
+        <div class="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-14">
+          <div>
+            {% if paragraph.field_ds_eyebrow.value %}
+              <div class="text-sm font-semibold uppercase tracking-[0.25em] text-cyan-300">
+                {{ paragraph.field_ds_eyebrow.value }}
+              </div>
+            {% endif %}
+
+            <h2 class="mt-4 max-w-2xl text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+              {{ paragraph.field_ds_heading.value }}
+            </h2>
+
+            <div class="mt-5 max-w-2xl text-lg leading-8 text-slate-300">
+              {{ content.field_ds_body }}
+            </div>
+          </div>
+
+          {% if proof_items %}
+            <div class="grid gap-4 sm:grid-cols-2">
+              {% for item in proof_items %}
+                <div class="about-proof-card rounded-[1.4rem] border border-white/10 bg-white/[0.04] p-5 text-sm leading-7 text-slate-200 backdrop-blur-sm">
+                  {{ item }}
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+  {% elseif is_services_page %}
+    <div class="container-site py-16 lg:py-20">
+      <div class="services-proof-shell rounded-[2rem] border border-slate-200 bg-slate-950 p-8 text-white shadow-2xl shadow-slate-950/20 sm:p-10">
+        <div class="grid gap-10 lg:grid-cols-[0.92fr_1.08fr] lg:gap-14">
+          <div>
+            {% if paragraph.field_ds_eyebrow.value %}
+              <div class="text-sm font-semibold uppercase tracking-[0.25em] text-cyan-300">
+                {{ paragraph.field_ds_eyebrow.value }}
+              </div>
+            {% endif %}
+
+            <h2 class="mt-4 max-w-2xl text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+              {{ paragraph.field_ds_heading.value }}
+            </h2>
+
+            <div class="mt-5 max-w-2xl text-lg leading-8 text-slate-300">
+              {{ content.field_ds_body }}
+            </div>
+
+            <div class="mt-8 inline-flex rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-sm text-slate-200">
+              Practical delivery. Long-term continuity.
+            </div>
+          </div>
+
+          {% if proof_items %}
+            <div class="grid gap-4 sm:grid-cols-2">
+              {% for item in proof_items %}
+                <div class="services-proof-card rounded-[1.35rem] border border-white/10 bg-white/[0.04] p-5 shadow-sm backdrop-blur-sm">
+                  <div class="services-proof-card__bar mb-4 h-1.5 w-12 rounded-full bg-cyan-300/80"></div>
+                  <div class="text-sm leading-7 text-slate-200">
+                    {{ item }}
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+  {% else %}
+    <div class="container-site grid gap-12 py-20 lg:grid-cols-2">
+      <div>
+        {% if paragraph.field_ds_eyebrow.value %}
+          <div class="text-sm font-semibold uppercase tracking-[0.25em] text-cyan-300">
+            {{ paragraph.field_ds_eyebrow.value }}
+          </div>
+        {% endif %}
+
+        <h2 class="mt-4 text-3xl font-semibold tracking-tight sm:text-4xl">
+          {{ paragraph.field_ds_heading.value }}
+        </h2>
+
+        <div class="mt-5 max-w-2xl text-lg leading-8 text-slate-300">
+          {{ content.field_ds_body }}
+        </div>
+      </div>
+
+      {% if proof_items %}
+        <div class="grid gap-4 sm:grid-cols-2">
+          {% for item in proof_items %}
+            <div class="rounded-[1.5rem] border border-white/10 bg-white/5 p-5 text-sm leading-7 text-slate-200">
+              {{ item }}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+  {% endif %}
+</section>

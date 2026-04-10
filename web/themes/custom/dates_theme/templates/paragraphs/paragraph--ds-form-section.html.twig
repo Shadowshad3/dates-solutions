@@ -1,0 +1,37 @@
+{#
+/**
+ * @file
+ * Theme override for the DS Form Section paragraph.
+ */
+#}
+
+{% set eyebrow = content.field_ds_eyebrow %}
+{% set heading = content.field_ds_heading %}
+{% set body = content.field_ds_body %}
+{% set is_simple_contact_form_page = is_contact_page or is_consultation_page %}
+
+<section class="section-form-section{{ is_simple_contact_form_page ? ' section-form-section--simple-contact' }}">
+  <div class="container-site">
+    <div class="form-section__shell">
+      <div class="form-section__intro">
+        {% if eyebrow %}
+          <div class="section-eyebrow">{{ eyebrow }}</div>
+        {% endif %}
+
+        {% if heading %}
+          <h2 class="section-title">{{ heading }}</h2>
+        {% endif %}
+
+        {% if body %}
+          <div class="section-copy">
+            {{ body }}
+          </div>
+        {% endif %}
+      </div>
+
+      <div class="form-section__panel">
+        {{ ds_form }}
+      </div>
+    </div>
+  </div>
+</section>

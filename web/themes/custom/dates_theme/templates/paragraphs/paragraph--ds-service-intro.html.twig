@@ -1,0 +1,123 @@
+{% if is_services_page %}
+  {{ attach_library('dates_theme/service_intro_selector') }}
+{% endif %}
+
+<section{{ attributes.addClass('w-full', 'bg-white') }}>
+  {% if is_services_page %}
+    <div class="container-site py-12 lg:py-14">
+      <div class="services-core-shell rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm sm:p-8 lg:p-8">
+        <div class="grid gap-6 lg:grid-cols-[0.42fr_0.58fr] lg:gap-8 service-selector-shell" data-service-selector>
+          <div class="services-selector-column">
+            {% if paragraph.field_ds_eyebrow.value %}
+              <div class="text-sm font-semibold uppercase tracking-[0.25em] text-blue-700">
+                {{ paragraph.field_ds_eyebrow.value }}
+              </div>
+            {% endif %}
+
+            <h2 class="mt-4 max-w-2xl text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">
+              {{ paragraph.field_ds_heading.value }}
+            </h2>
+
+            <div class="mt-5 max-w-2xl text-lg leading-8 text-slate-600">
+              {{ content.field_ds_body }}
+            </div>
+
+            <div class="mt-6 border-t border-slate-200 pt-5">
+              <div class="text-sm font-semibold uppercase tracking-[0.2em] text-slate-500">
+                Service list
+              </div>
+
+              {% if services_items %}
+                <div class="mt-4 grid gap-2.5">
+                  {% for service in services_items %}
+                    <button
+                      type="button"
+                      class="service-selector-nav-item {{ loop.first ? 'is-active' }}"
+                      data-service-selector-button
+                      data-target="service-detail-{{ loop.index0 }}"
+                      aria-selected="{{ loop.first ? 'true' : 'false' }}"
+                    >
+                      <span>{{ service.title }}</span>
+                    </button>
+                  {% endfor %}
+                </div>
+              {% endif %}
+            </div>
+          </div>
+
+          <div class="services-detail-shell rounded-[1.5rem] border border-slate-200 bg-slate-50 p-4 sm:p-5">
+            {% if services_items %}
+              {% for service in services_items %}
+                <article
+                  id="service-detail-{{ loop.index0 }}"
+                  class="service-detail-panel {{ loop.first ? 'is-active' }}"
+                  data-service-selector-panel
+                  {% if not loop.first %}hidden{% endif %}
+                >
+                  {% if service.image_url %}
+                    <div class="service-detail-media mb-5 overflow-hidden rounded-[1.35rem] border border-slate-200 bg-white">
+                      <img src="{{ service.image_url }}" alt="{{ service.image_alt }}">
+                    </div>
+                  {% endif %}
+
+                  <div class="rounded-[1.35rem] border border-slate-200 bg-white p-5 shadow-sm">
+                    <div class="inline-flex rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-blue-700">
+                      Service overview
+                    </div>
+
+                    <h3 class="mt-4 text-3xl font-semibold tracking-tight text-slate-950">
+                      {{ service.title }}
+                    </h3>
+
+                    <div class="mt-4 max-w-3xl text-lg leading-8 text-slate-600">
+                      {{ service.summary|raw }}
+                    </div>
+
+                    <div class="mt-6 grid gap-3 sm:grid-cols-3">
+                      <div class="service-detail-pill">Structured delivery</div>
+                      <div class="service-detail-pill">Long-term support</div>
+                      <div class="service-detail-pill">Business-aligned execution</div>
+                    </div>
+
+                    <div class="mt-6 flex flex-wrap gap-3">
+                      <a href="{{ service.url }}" class="button-primary">Learn more</a>
+                    </div>
+                  </div>
+                </article>
+              {% endfor %}
+            {% else %}
+              <div class="rounded-[1.35rem] border border-dashed border-slate-300 bg-white p-8 text-slate-600">
+                No published services found yet.
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+  {% else %}
+    <div class="container-site py-20">
+      <div class="max-w-3xl">
+        {% if paragraph.field_ds_eyebrow.value %}
+          <div class="text-sm font-semibold uppercase tracking-[0.25em] text-blue-700">
+            {{ paragraph.field_ds_eyebrow.value }}
+          </div>
+        {% endif %}
+
+        <h2 class="mt-4 text-3xl font-semibold tracking-tight sm:text-4xl">
+          {{ paragraph.field_ds_heading.value }}
+        </h2>
+
+        <div class="mt-4 text-lg leading-8 text-slate-600">
+          {{ content.field_ds_body }}
+        </div>
+      </div>
+
+      {% if services_view %}
+        <div class="mt-10">
+          {{ services_view }}
+        </div>
+      {% endif %}
+    </div>
+  {% endif %}
+</section>
