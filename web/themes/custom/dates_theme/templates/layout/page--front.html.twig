@@ -24,16 +24,51 @@
   </main>
 
   <footer class="border-t border-slate-200 bg-white">
-    <div class="container-site flex flex-col gap-4 py-8 text-sm text-slate-500 md:flex-row md:items-center md:justify-between">
-      <div>
-        <div class="font-semibold text-slate-900">Date Solutions</div>
-        <div class="mt-1">Drupal, SaaS, and long-term web support.</div>
+    <div class="container-site py-10">
+      <div class="grid gap-8 md:grid-cols-[1.2fr_.8fr_.9fr] md:items-start">
+        <div>
+          <div class="text-lg font-semibold text-slate-900">Date Solutions</div>
+          <div class="mt-2 max-w-md text-sm leading-7 text-slate-600">
+            Drupal, SaaS, systems integration, website maintenance, and long-term web support for businesses in the Philippines, Asia, and international markets.
+          </div>
+
+          <div class="mt-4 text-sm text-slate-600">
+            <div class="font-medium text-slate-900">Email</div>
+            <a href="mailto:info@datesolutions.com.ph" class="mt-1 inline-flex text-slate-600 transition hover:text-slate-900">
+              info@datesolutions.com.ph
+            </a>
+          </div>
+        </div>
+
+        <div>
+          <div class="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">
+            Company
+          </div>
+
+          <div class="mt-4 grid gap-3 text-sm">
+            <a href="/" class="text-slate-600 transition hover:text-slate-900">Home</a>
+            <a href="/about" class="text-slate-600 transition hover:text-slate-900">About</a>
+            <a href="/services" class="text-slate-600 transition hover:text-slate-900">Services</a>
+            <a href="/services-library" class="text-slate-600 transition hover:text-slate-900">Services Library</a>
+            <a href="/contact-us" class="text-slate-600 transition hover:text-slate-900">Contact Us</a>
+            <a href="/book-consultation" class="text-slate-600 transition hover:text-slate-900">Book a Consultation</a>
+          </div>
+        </div>
+
+        <div>
+          <div class="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">
+            Trust
+          </div>
+
+          <div class="mt-4 grid gap-3 text-sm">
+            <a href="/privacy-policy" class="text-slate-600 transition hover:text-slate-900">Privacy Policy</a>
+            <a href="/terms-of-use" class="text-slate-600 transition hover:text-slate-900">Terms of Use</a>
+          </div>
+        </div>
       </div>
 
-      <div class="flex gap-6">
-        <a href="/" class="hover:text-slate-900">Home</a>
-        <a href="/about" class="hover:text-slate-900">About</a>
-        <a href="/services" class="hover:text-slate-900">Services</a>
+      <div class="mt-8 border-t border-slate-200 pt-5 text-sm text-slate-500">
+        © {{ "now"|date("Y") }} Date Solutions. All rights reserved.
       </div>
     </div>
   </footer>
