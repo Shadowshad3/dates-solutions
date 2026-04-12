@@ -11,10 +11,30 @@ declare(strict_types=1);
  * Implements hook_mail().
  */
 function dates_forms_mail(string $key, array &$message, array $params): void {
-  if ($key !== 'lead_notification') {
-    return;
+  if (!empty($params['from'])) {
+    $message['from'] = $params['from'];
+    $message['headers']['From'] = $params['from'];
+    $message['headers']['Sender'] = $params['from'];
   }
 
-  $message['subject'] = $params['subject'] ?? 'Date Solutions inquiry';
-  $message['body'][] = implode(PHP_EOL, $params['lines'] ?? []);
+  if (!empty($params['reply_to'])) {
+    $message['headers']['Reply-To'] = $params['reply_to'];
+  }
+
+  switch ($key) {
+    case 'lead_notification':
+      $message['subject'] = $params['subject'] ?? 'Date Solutions inquiry';
+      $message['body'][] = implode(PHP_EOL, $params['lines'] ?? []);
+      break;
+
+    case 'contact_autoresponse':
+      $message['subject'] = $params['subject'] ?? 'We received your message';
+      $message['body'][] = implode(PHP_EOL, $params['lines'] ?? []);
+      break;
+
+    case 'consultation_autoresponse':
+      $message['subject'] = $params['subject'] ?? 'We received your consultation request';
+      $message['body'][] = implode(PHP_EOL, $params['lines'] ?? []);
+      break;
+  }
 }
