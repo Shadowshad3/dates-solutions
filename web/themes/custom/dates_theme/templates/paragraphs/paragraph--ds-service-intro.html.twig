@@ -73,11 +73,13 @@
                       {{ service.summary|raw }}
                     </div>
 
-                    <div class="mt-6 grid gap-3 sm:grid-cols-3">
-                      <div class="service-detail-pill">Structured delivery</div>
-                      <div class="service-detail-pill">Long-term support</div>
-                      <div class="service-detail-pill">Business-aligned execution</div>
-                    </div>
+                    {% if service.highlights %}
+                      <div class="mt-6 grid gap-3 sm:grid-cols-3">
+                        {% for highlight in service.highlights %}
+                          <div class="service-detail-pill">{{ highlight }}</div>
+                        {% endfor %}
+                      </div>
+                    {% endif %}
 
                     <div class="mt-6 flex flex-wrap gap-3">
                       <a href="{{ service.url }}" class="button-primary">Learn more</a>

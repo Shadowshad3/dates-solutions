@@ -52,34 +52,6 @@ function _dates_theme_get_landing_page_context(): array {
 }
 
 /**
- * Extract up to 3 highlight pills from a Service node.
- */
-function _dates_theme_service_highlights($node, string $field_name = 'field_ds_service_highlights'): array {
-  if (
-    !$node instanceof \Drupal\node\NodeInterface ||
-    !$node->hasField($field_name) ||
-    $node->get($field_name)->isEmpty()
-  ) {
-    return [];
-  }
-
-  $highlights = [];
-
-  foreach ($node->get($field_name) as $item) {
-    $value = trim((string) ($item->value ?? ''));
-    if ($value !== '') {
-      $highlights[] = $value;
-    }
-
-    if (count($highlights) >= 3) {
-      break;
-    }
-  }
-
-  return $highlights;
-}
-
-/**
  * Build structured service items for the Services selector.
  */
 function _dates_theme_get_service_items(): array {
@@ -119,7 +91,6 @@ function _dates_theme_get_service_items(): array {
       'url' => $node->toUrl()->toString(),
       'image_url' => $image_data['url'],
       'image_alt' => $image_data['alt'] ?: $node->label(),
-      'highlights' => _dates_theme_service_highlights($node),
     ];
   }
 
@@ -182,22 +153,25 @@ function dates_theme_preprocess_paragraph(array &$variables): void {
       $variables['secondary_cta'] = _dates_theme_link_data($paragraph, 'field_ds_secondary_cta');
 
       $hero_media = _dates_theme_media_asset_data($paragraph, 'field_ds_hero_media');
-      $legacy_video_url = _dates_theme_file_url($paragraph, 'field_hero_background_video');
 
-      if (empty($hero_media['url']) && $legacy_video_url) {
-        $hero_media = [
-          'type' => 'video',
-          'url' => $legacy_video_url,
-          'alt' => '',
-          'mime_type' => 'video/mp4',
-        ];
+      if (empty($hero_media['url'])) {
+        $legacy_video_url = _dates_theme_file_url($paragraph, 'field_hero_background_video');
+
+        if ($legacy_video_url) {
+          $hero_media = [
+            'type' => 'video',
+            'url' => $legacy_video_url,
+            'alt' => '',
+            'mime_type' => 'video/mp4',
+          ];
+        }
       }
 
-      $variables['hero_media_type'] = $hero_media['type'] ?? NULL;
-      $variables['hero_media_url'] = $hero_media['url'] ?? NULL;
-      $variables['hero_media_alt'] = $hero_media['alt'] ?? '';
-      $variables['hero_image_url'] = (($hero_media['type'] ?? NULL) === 'image') ? $hero_media['url'] : NULL;
-      $variables['hero_video_url'] = (($hero_media['type'] ?? NULL) === 'video') ? $hero_media['url'] : $legacy_video_url;
+      $variables['hero_media_type'] = $hero_media['type'];
+      $variables['hero_media_url'] = $hero_media['url'];
+      $variables['hero_media_alt'] = $hero_media['alt'];
+      $variables['hero_image_url'] = $hero_media['type'] === 'image' ? $hero_media['url'] : NULL;
+      $variables['hero_video_url'] = $hero_media['type'] === 'video' ? $hero_media['url'] : NULL;
       break;
 
     case 'ds_trust_strip':

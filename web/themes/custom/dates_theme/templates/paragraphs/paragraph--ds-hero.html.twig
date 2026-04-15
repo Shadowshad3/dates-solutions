@@ -122,37 +122,7 @@
     </div>
 
   {% else %}
-    {% if hero_media_type == 'video' and hero_media_url %}
-      <video
-        class="absolute inset-0 h-full w-full object-cover"
-        autoplay
-        muted
-        loop
-        playsinline
-        preload="metadata"
-        aria-hidden="true"
-      >
-        <source src="{{ hero_media_url }}" type="video/mp4">
-      </video>
-
-      <div class="absolute inset-0 bg-slate-950/58"></div>
-      <div class="absolute inset-0 bg-gradient-to-r from-slate-950/86 via-slate-950/54 to-slate-950/18"></div>
-      <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(37,99,235,0.18),transparent_26%),radial-gradient(circle_at_right,rgba(34,211,238,0.10),transparent_24%)]"></div>
-
-    {% elseif hero_media_type == 'image' and hero_media_url %}
-      <div class="absolute inset-0" aria-hidden="true">
-        <img
-          src="{{ hero_media_url }}"
-          alt=""
-          class="h-full w-full object-cover"
-        >
-      </div>
-
-      <div class="absolute inset-0 bg-slate-950/62"></div>
-      <div class="absolute inset-0 bg-gradient-to-r from-slate-950/88 via-slate-950/58 to-slate-950/22"></div>
-      <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(37,99,235,0.18),transparent_26%),radial-gradient(circle_at_right,rgba(34,211,238,0.10),transparent_24%)]"></div>
-
-    {% elseif hero_video_url %}
+    {% if hero_video_url %}
       <video
         class="absolute inset-0 h-full w-full object-cover"
         autoplay
@@ -167,6 +137,19 @@
 
       <div class="absolute inset-0 bg-slate-950/58"></div>
       <div class="absolute inset-0 bg-gradient-to-r from-slate-950/86 via-slate-950/54 to-slate-950/18"></div>
+      <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(37,99,235,0.18),transparent_26%),radial-gradient(circle_at_right,rgba(34,211,238,0.10),transparent_24%)]"></div>
+
+    {% elseif hero_image_url %}
+      <div class="absolute inset-0" aria-hidden="true">
+        <img
+          src="{{ hero_image_url }}"
+          alt=""
+          class="h-full w-full object-cover"
+        >
+      </div>
+
+      <div class="absolute inset-0 bg-slate-950/62"></div>
+      <div class="absolute inset-0 bg-gradient-to-r from-slate-950/88 via-slate-950/58 to-slate-950/22"></div>
       <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(37,99,235,0.18),transparent_26%),radial-gradient(circle_at_right,rgba(34,211,238,0.10),transparent_24%)]"></div>
 
     {% else %}
