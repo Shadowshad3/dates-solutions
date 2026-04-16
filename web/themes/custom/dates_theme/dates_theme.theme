@@ -5,6 +5,9 @@
  * Theme helpers for Date Solutions.
  */
 
+use Drupal\Core\Logger\RfcLogLevel;
+use Drupal\node\NodeInterface;
+
 /**
  * Get landing page variant flags based on current route alias.
  */
@@ -12,8 +15,6 @@ function _dates_theme_get_landing_page_context(): array {
   $is_home_page = FALSE;
   $is_about_page = FALSE;
   $is_services_page = FALSE;
-  $is_contact_page = FALSE;
-  $is_consultation_page = FALSE;
   $landing_page_variant = 'default';
 
   $path_matcher = \Drupal::service('path.matcher');
@@ -32,51 +33,13 @@ function _dates_theme_get_landing_page_context(): array {
     $is_services_page = TRUE;
     $landing_page_variant = 'services';
   }
-  elseif ($current_alias === '/contact-us') {
-    $is_contact_page = TRUE;
-    $landing_page_variant = 'contact';
-  }
-  elseif ($current_alias === '/book-consultation') {
-    $is_consultation_page = TRUE;
-    $landing_page_variant = 'consultation';
-  }
 
   return [
     'is_home_page' => $is_home_page,
     'is_about_page' => $is_about_page,
     'is_services_page' => $is_services_page,
-    'is_contact_page' => $is_contact_page,
-    'is_consultation_page' => $is_consultation_page,
     'landing_page_variant' => $landing_page_variant,
   ];
-}
-
-/**
- * Extract up to 3 highlight pills from a Service node.
- */
-function _dates_theme_service_highlights($node, string $field_name = 'field_ds_service_highlights'): array {
-  if (
-    !$node instanceof \Drupal\node\NodeInterface ||
-    !$node->hasField($field_name) ||
-    $node->get($field_name)->isEmpty()
-  ) {
-    return [];
-  }
-
-  $highlights = [];
-
-  foreach ($node->get($field_name) as $item) {
-    $value = trim((string) ($item->value ?? ''));
-    if ($value !== '') {
-      $highlights[] = $value;
-    }
-
-    if (count($highlights) >= 3) {
-      break;
-    }
-  }
-
-  return $highlights;
 }
 
 /**
@@ -101,7 +64,7 @@ function _dates_theme_get_service_items(): array {
   $items = [];
 
   foreach ($nodes as $node) {
-    if (!$node instanceof \Drupal\node\NodeInterface) {
+    if (!$node instanceof NodeInterface) {
       continue;
     }
 
@@ -119,7 +82,6 @@ function _dates_theme_get_service_items(): array {
       'url' => $node->toUrl()->toString(),
       'image_url' => $image_data['url'],
       'image_alt' => $image_data['alt'] ?: $node->label(),
-      'highlights' => _dates_theme_service_highlights($node),
     ];
   }
 
@@ -130,29 +92,30 @@ function _dates_theme_get_service_items(): array {
  * Preprocess node templates.
  */
 function dates_theme_preprocess_node(array &$variables): void {
-  if (empty($variables['node'])) {
+  if (empty($variables['node']) || !$variables['node'] instanceof NodeInterface) {
     return;
   }
 
+  /** @var \Drupal\node\NodeInterface $node */
   $node = $variables['node'];
   $context = _dates_theme_get_landing_page_context();
 
   $variables['is_home_page'] = $context['is_home_page'];
   $variables['is_about_page'] = $context['is_about_page'];
   $variables['is_services_page'] = $context['is_services_page'];
-  $variables['is_contact_page'] = $context['is_contact_page'];
-  $variables['is_consultation_page'] = $context['is_consultation_page'];
   $variables['landing_page_variant'] = $context['landing_page_variant'];
 
-  if ($node->bundle() === 'service' && ($variables['view_mode'] ?? '') === 'teaser') {
-    $summary_item = $node->get('field_ds_summary');
+  if ($node->bundle() === 'service') {
+    $variables['service_link'] = $node->toUrl()->toString();
     $variables['service_summary'] = '';
+    $variables['service_image'] = _dates_theme_media_image_data($node, 'field_ds_card_image');
+    $variables['service_consultation_url'] = '/book-consultation';
+    $variables['service_contact_url'] = '/contact';
 
-    if (!$summary_item->isEmpty()) {
+    if ($node->hasField('field_ds_summary') && !$node->get('field_ds_summary')->isEmpty()) {
+      $summary_item = $node->get('field_ds_summary')->first();
       $variables['service_summary'] = $summary_item->processed ?? $summary_item->value ?? '';
     }
-
-    $variables['service_link'] = $node->toUrl()->toString();
   }
 }
 
@@ -171,8 +134,6 @@ function dates_theme_preprocess_paragraph(array &$variables): void {
   $variables['is_home_page'] = $context['is_home_page'];
   $variables['is_about_page'] = $context['is_about_page'];
   $variables['is_services_page'] = $context['is_services_page'];
-  $variables['is_contact_page'] = $context['is_contact_page'];
-  $variables['is_consultation_page'] = $context['is_consultation_page'];
   $variables['landing_page_variant'] = $context['landing_page_variant'];
 
   switch ($bundle) {
@@ -180,24 +141,7 @@ function dates_theme_preprocess_paragraph(array &$variables): void {
       $variables['markets'] = _dates_theme_text_values($paragraph, 'field_ds_markets');
       $variables['primary_cta'] = _dates_theme_link_data($paragraph, 'field_ds_primary_cta');
       $variables['secondary_cta'] = _dates_theme_link_data($paragraph, 'field_ds_secondary_cta');
-
-      $hero_media = _dates_theme_media_asset_data($paragraph, 'field_ds_hero_media');
-      $legacy_video_url = _dates_theme_file_url($paragraph, 'field_hero_background_video');
-
-      if (empty($hero_media['url']) && $legacy_video_url) {
-        $hero_media = [
-          'type' => 'video',
-          'url' => $legacy_video_url,
-          'alt' => '',
-          'mime_type' => 'video/mp4',
-        ];
-      }
-
-      $variables['hero_media_type'] = $hero_media['type'] ?? NULL;
-      $variables['hero_media_url'] = $hero_media['url'] ?? NULL;
-      $variables['hero_media_alt'] = $hero_media['alt'] ?? '';
-      $variables['hero_image_url'] = (($hero_media['type'] ?? NULL) === 'image') ? $hero_media['url'] : NULL;
-      $variables['hero_video_url'] = (($hero_media['type'] ?? NULL) === 'video') ? $hero_media['url'] : $legacy_video_url;
+      $variables['hero_video_url'] = _dates_theme_file_url($paragraph, 'field_hero_background_video');
       break;
 
     case 'ds_trust_strip':
@@ -268,7 +212,7 @@ function _dates_theme_build_form_section_form($paragraph): array {
     !$paragraph->hasField('field_ds_form_variant') ||
     $paragraph->get('field_ds_form_variant')->isEmpty()
   ) {
-    return [];
+    return _dates_theme_form_fallback_markup('Form variant is not configured yet.');
   }
 
   $variant = $paragraph->get('field_ds_form_variant')->value ?? '';
@@ -284,11 +228,54 @@ function _dates_theme_build_form_section_form($paragraph): array {
       break;
   }
 
-  if (!$form_class || !class_exists($form_class)) {
-    return [];
+  if (!$form_class) {
+    return _dates_theme_form_fallback_markup('Selected form variant is not supported yet.');
   }
 
-  return \Drupal::formBuilder()->getForm($form_class);
+  if (!\Drupal::moduleHandler()->moduleExists('dates_forms')) {
+    \Drupal::logger('dates_theme')->error('dates_forms module is not enabled while trying to render form variant "@variant".', [
+      '@variant' => $variant,
+    ]);
+    return _dates_theme_form_fallback_markup('The form module is currently unavailable.');
+  }
+
+  if (!class_exists($form_class)) {
+    \Drupal::logger('dates_theme')->error('Form class "@class" was not found for form variant "@variant".', [
+      '@class' => $form_class,
+      '@variant' => $variant,
+    ]);
+    return _dates_theme_form_fallback_markup('The requested form is not available right now.');
+  }
+
+  try {
+    return \Drupal::formBuilder()->getForm($form_class);
+  }
+  catch (\Throwable $e) {
+    \Drupal::logger('dates_theme')->log(RfcLogLevel::ERROR, 'Failed rendering DS form section. Variant: @variant. Message: @message', [
+      '@variant' => $variant,
+      '@message' => $e->getMessage(),
+    ]);
+
+    return _dates_theme_form_fallback_markup('We are temporarily unable to load this form. Please use the Contact page while we complete a quick fix.');
+  }
+}
+
+/**
+ * Fallback markup for form failures.
+ */
+function _dates_theme_form_fallback_markup(string $message): array {
+  return [
+    '#type' => 'inline_template',
+    '#template' => '
+      <div class="rounded-2xl border border-amber-200 bg-amber-50 px-5 py-4 text-sm text-amber-900">
+        <strong class="block mb-1">Form temporarily unavailable</strong>
+        <span>{{ message }}</span>
+      </div>
+    ',
+    '#context' => [
+      'message' => $message,
+    ],
+  ];
 }
 
 /**
@@ -339,90 +326,6 @@ function _dates_theme_file_url($entity, string $field_name): ?string {
   }
 
   return \Drupal::service('file_url_generator')->generateString($file->getFileUri());
-}
-
-/**
- * Resolve hero media data from a media reference field.
- *
- * Supports image and video media. Returns empty data if nothing valid is found.
- */
-function _dates_theme_media_asset_data($entity, string $field_name): array {
-  $data = [
-    'type' => NULL,
-    'url' => NULL,
-    'alt' => '',
-    'mime_type' => '',
-  ];
-
-  if (!$entity->hasField($field_name) || $entity->get($field_name)->isEmpty()) {
-    return $data;
-  }
-
-  $item = $entity->get($field_name)->first();
-  $target = $item->entity ?? NULL;
-
-  if (!$target) {
-    return $data;
-  }
-
-  $file_url_generator = \Drupal::service('file_url_generator');
-
-  if ($target instanceof \Drupal\file\FileInterface) {
-    $mime_type = $target->getMimeType() ?? '';
-
-    if (str_starts_with($mime_type, 'image/')) {
-      $data['type'] = 'image';
-    }
-    elseif (str_starts_with($mime_type, 'video/')) {
-      $data['type'] = 'video';
-    }
-
-    if ($data['type']) {
-      $data['url'] = $file_url_generator->generateString($target->getFileUri());
-      $data['alt'] = $item->alt ?? '';
-      $data['mime_type'] = $mime_type;
-    }
-
-    return $data;
-  }
-
-  if ($target instanceof \Drupal\media\MediaInterface) {
-    foreach ($target->getFields() as $media_field) {
-      if ($media_field->isEmpty()) {
-        continue;
-      }
-
-      $source_item = $media_field->first();
-      $source_file = $source_item->entity ?? NULL;
-
-      if (!$source_file instanceof \Drupal\file\FileInterface) {
-        continue;
-      }
-
-      $mime_type = $source_file->getMimeType() ?? '';
-      $type = NULL;
-
-      if (str_starts_with($mime_type, 'image/')) {
-        $type = 'image';
-      }
-      elseif (str_starts_with($mime_type, 'video/')) {
-        $type = 'video';
-      }
-
-      if (!$type) {
-        continue;
-      }
-
-      $data['type'] = $type;
-      $data['url'] = $file_url_generator->generateString($source_file->getFileUri());
-      $data['alt'] = $source_item->alt ?? '';
-      $data['mime_type'] = $mime_type;
-
-      return $data;
-    }
-  }
-
-  return $data;
 }
 
 /**

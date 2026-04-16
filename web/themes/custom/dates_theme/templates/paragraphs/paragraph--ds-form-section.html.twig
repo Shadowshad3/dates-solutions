@@ -8,9 +8,8 @@
 {% set eyebrow = content.field_ds_eyebrow %}
 {% set heading = content.field_ds_heading %}
 {% set body = content.field_ds_body %}
-{% set is_simple_contact_form_page = is_contact_page or is_consultation_page %}
 
-<section class="section-form-section{{ is_simple_contact_form_page ? ' section-form-section--simple-contact' }}">
+<section class="section-form-section">
   <div class="container-site">
     <div class="form-section__shell">
       <div class="form-section__intro">
@@ -27,6 +26,13 @@
             {{ body }}
           </div>
         {% endif %}
+
+        <div class="form-trust-points">
+          <div class="form-trust-point">Free initial consultation</div>
+          <div class="form-trust-point">No commitment required</div>
+          <div class="form-trust-point">Practical recommendations based on your setup</div>
+          <div class="form-trust-point">Focused on long-term solutions, not quick fixes</div>
+        </div>
       </div>
 
       <div class="form-section__panel">
