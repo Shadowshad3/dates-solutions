@@ -110,7 +110,7 @@ function dates_theme_preprocess_node(array &$variables): void {
     $variables['service_summary'] = '';
     $variables['service_image'] = _dates_theme_media_image_data($node, 'field_ds_card_image');
     $variables['service_consultation_url'] = '/book-consultation';
-    $variables['service_contact_url'] = '/contact';
+    $variables['service_contact_url'] = '/contact-us';
 
     if ($node->hasField('field_ds_summary') && !$node->get('field_ds_summary')->isEmpty()) {
       $summary_item = $node->get('field_ds_summary')->first();
